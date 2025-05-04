@@ -1,19 +1,3 @@
-
-user_input = st.text_input("질문을 입력하세요:")
-
-if user_input:
-    with st.spinner("GPT-4o가 생각 중..."):
-        response = client.chat.completions.create(
-            model="gpt-4o",
-            messages=[
-                {"role": "system", "content": "너는 중학교 과학 선생님이야. 학생의 질문이 들어오면 중학교 수준에서 친절하게 대답해줘."},
-                {"role": "user", "content": user_input}
-            ],
-            temperature=0.5
-        )
-        answer = response.choices[0].message.content
-        st.markdown(f"**GPT의 답변:** {answer}")
-
 import streamlit as st
 from openai import OpenAI
 
