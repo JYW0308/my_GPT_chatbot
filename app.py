@@ -29,25 +29,18 @@ if user_input:
         )
         gpt_reply = response.choices[0].message.content
         st.session_state.messages.append({"role": "assistant", "content": gpt_reply})
+        
+# 대화 내용을 텍스트로 정리
+chat_lines = []
+for msg in st.session_state.messages[1:]:
+    role = "🙋‍♂️ 너" if msg["role"] == "user" else "🤖 GPT"
+    chat_lines.append(f"{role}: {msg['content']}\n")
+chat_text = "\n".join(chat_lines)
 
-# 전체 대화 출력
-for msg in st.session_state.messages[1:]:  # 시스템 메시지는 생략
-    if msg["role"] == "user":
-        st.markdown(f"**🙋‍♂️ 너:** {msg['content']}")
-    else:
-        st.markdown(f"**🤖 GPT:** {msg['content']}")
-
-if st.button("📥 대화 내용 다운로드 (TXT)"):
-    chat_lines = []
-    for msg in st.session_state.messages[1:]:  # system 메시지는 제외
-        role = "🙋‍♂️ 너" if msg["role"] == "user" else "🤖 GPT"
-        chat_lines.append(f"{role}: {msg['content']}\n")
-
-    chat_text = "\n".join(chat_lines)
-
-    st.download_button(
-        label="💾 텍스트 파일로 저장",
-        data=chat_text,
-        file_name="chat_log.txt",
-        mime="text/plain"
-    )
+# 곧바로 텍스트 다운로드 버튼 표시 (한 번에 저장)
+st.download_button(
+    label="📥 대화 내용 TXT로 저장",
+    data=chat_text,
+    file_name="chat_log.txt",
+    mime="text/plain"
+)
