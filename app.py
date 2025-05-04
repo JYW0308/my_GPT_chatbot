@@ -11,11 +11,9 @@ if "messages" not in st.session_state:
     st.session_state.messages = [
         {"role": "system", "content": "너는 중학교 과학 선생님이야. 학생의 질문이 들어오면 중학교 수준에서 친절하게 대답해줘."}
     ]
-
-# 텍스트 입력 (key 지정)
+# 사용자 입력 받기 (key 지정 필수!)
 user_input = st.text_input("질문을 입력하세요:", key="user_input")
 
-# 질문이 들어오면 GPT에게 응답 요청
 if user_input:
     st.session_state.messages.append({"role": "user", "content": user_input})
 
@@ -31,8 +29,8 @@ if user_input:
         except Exception as e:
             st.error(f"⚠️ 오류 발생: {e}")
 
-    # 입력 초기화
-    st.session_state.user_input = ""
+    # 입력 초기화 (딕셔너리 접근 방식 사용)
+    st.session_state["user_input"] = ""
 
 # 대화 출력
 for msg in st.session_state.messages[1:]:
