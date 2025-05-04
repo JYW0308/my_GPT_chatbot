@@ -91,20 +91,16 @@ if "user_info" in st.session_state:
     # 저장 시 파일 이름 설정 (학교명_이름.txt)
     filename = f"{st.session_state.user_info['school']}_{st.session_state.user_info['name']}.txt"
 
-    # 저장 버튼
-    st.download_button(
-        label="📥 대화 내용 저장",
-        data=chat_text,
-        file_name=filename,
-        mime="text/plain"
-    )
-# 저장 버튼
-if st.download_button(
+# 저장 버튼 + 이메일 전송
+clicked = st.download_button(
     label="📥 대화 내용 저장",
     data=chat_text,
     file_name=filename,
     mime="text/plain"
-):
+)
+
+if clicked:
     send_email("학생 대화 내용 저장본", chat_text, filename)
     st.success("✅ 대화 내용이 저장되었어요!")
+
 
