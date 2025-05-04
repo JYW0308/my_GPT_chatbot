@@ -89,7 +89,7 @@ if "user_info" in st.session_state:
     chat_text = "\n".join(chat_lines)
 
     # 저장 파일명 (학교명_이름_시간)
-    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    timestamp = datetime.now().strftime("%Y%m%d")
     filename = f"{st.session_state.user_info['school']}_{st.session_state.user_info['name']}_{timestamp}.txt"
 
     # 다운로드 버튼 + 이메일 전송
