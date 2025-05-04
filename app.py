@@ -56,7 +56,7 @@ if school and name:
 
     # 현재 시각 기반 파일명
     now = datetime.datetime.now()
-    filename = now.strftime("%Y%m%d%H%M") + ".txt"
+    filename = now.strftime("{school} {name}") + ".txt"
 
     # 텍스트 파일 준비
     file_buffer = io.BytesIO(chat_text.encode("utf-8"))
