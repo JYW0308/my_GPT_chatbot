@@ -1,8 +1,25 @@
 import streamlit as st
 from openai import OpenAI
+from email.mime.text import MIMEText
+import smtplib
+
 
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
+def send_email(subject, body):
+    sender = st.secrets["EMAIL_SENDER"]
+    receiver = st.secrets["EMAIL_RECEIVER"]
+    password = st.secrets["EMAIL_APP_PASSWORD"]
+
+    msg = MIMEText(body)
+    msg["Subject"] = subject
+    msg["From"] = sender
+    msg["To"] = receiver
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+        server.login(sender, password)
+        server.send_message(msg)
+        
 st.title("중학 과학 도우미 챗봇")
 st.write("인공지능에게 자유롭게 질문해보세요.")
 
@@ -49,3 +66,6 @@ st.download_button(
     file_name="chat_log.txt",
     mime="text/plain"
 )
+if st.button("📥 대화 내용 이메일로 전송"):
+    send_email("학생 대화 내용 저장본", chat_text)
+    st.success("✅ 대화 내용이 이메일로 전송되었어요!")
