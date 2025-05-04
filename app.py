@@ -5,7 +5,6 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 import smtplib
 from datetime import datetime
-import io
 
 # OpenAI 클라이언트 설정
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
@@ -31,7 +30,7 @@ def send_email(subject, body, filename):
         server.login(sender, password)
         server.send_message(msg)
 
-# 초기 설정
+# 초기 UI
 st.title("중학 과학 도우미 챗봇")
 st.write("AI 선생님에게 자유롭게 질문해보세요.")
 
@@ -47,6 +46,7 @@ if "user_info" not in st.session_state:
         elif submitted:
             st.warning("학교명과 이름을 모두 입력해주세요.")
 
+# 사용자 정보가 입력된 경우
 if "user_info" in st.session_state:
     user_label = f"{st.session_state.user_info['school']} {st.session_state.user_info['name']}"
 
@@ -56,7 +56,7 @@ if "user_info" in st.session_state:
             {"role": "system", "content": "너는 중학교 과학 선생님이야. 학생의 질문이 들어오면 중학교 수준에서 친절하게 대답해줘."}
         ]
 
-    # 사용자 입력 받기
+    # 사용자 입력
     user_input = st.chat_input(f"{user_label}님, 질문을 입력하세요")
 
     if user_input:
@@ -81,26 +81,25 @@ if "user_info" in st.session_state:
         else:
             st.markdown(f"**🤖 GPT:** {msg['content']}")
 
-    # 대화 내용 저장
+    # 대화 정리 및 저장
     chat_lines = []
     for msg in st.session_state.messages[1:]:
         role = f"🙋‍♂️ {user_label}" if msg["role"] == "user" else "🤖 GPT"
         chat_lines.append(f"{role}: {msg['content']}\n")
     chat_text = "\n".join(chat_lines)
 
-    # 저장 시 파일 이름 설정 (학교명_이름.txt)
-    filename = f"{st.session_state.user_info['school']}_{st.session_state.user_info['name']}.txt"
+    # 저장 파일명 (학교명_이름_시간)
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    filename = f"{st.session_state.user_info['school']}_{st.session_state.user_info['name']}_{timestamp}.txt"
 
-# 저장 버튼 + 이메일 전송
-clicked = st.download_button(
-    label="📥 대화 내용 저장",
-    data=chat_text,
-    file_name=filename,
-    mime="text/plain"
-)
+    # 다운로드 버튼 + 이메일 전송
+    clicked = st.download_button(
+        label="📥 대화 내용 저장",
+        data=chat_text,
+        file_name=filename,
+        mime="text/plain"
+    )
 
-if clicked:
-    send_email("학생 대화 내용 저장본", chat_text, filename)
-    st.success("✅ 대화 내용이 저장되었어요!")
-
-
+    if clicked:
+        send_email("학생 대화 내용 저장본", chat_text, filename)
+        st.success("✅ 대화 내용이 저장되었어요!")
