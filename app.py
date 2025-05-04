@@ -98,7 +98,13 @@ if "user_info" in st.session_state:
         file_name=filename,
         mime="text/plain"
     )
-
-    # 동시에 이메일 전송
+# 저장 버튼
+if st.download_button(
+    label="📥 대화 내용 저장",
+    data=chat_text,
+    file_name=filename,
+    mime="text/plain"
+):
     send_email("학생 대화 내용 저장본", chat_text, filename)
     st.success("✅ 대화 내용이 저장되었어요!")
+
