@@ -36,3 +36,15 @@ for msg in st.session_state.messages[1:]:  # 시스템 메시지는 생략
         st.markdown(f"**🙋‍♂️ 너:** {msg['content']}")
     else:
         st.markdown(f"**🤖 GPT:** {msg['content']}")
+
+import json
+
+# 대화 저장 버튼 (JSON으로)
+if st.button("📥 대화 내용 다운로드 (JSON)"):
+    chat_data = json.dumps(st.session_state.messages, ensure_ascii=False, indent=2)
+    st.download_button(
+        label="💾 JSON 파일로 저장",
+        data=chat_data,
+        file_name="chat_log.json",
+        mime="application/json"
+    )
