@@ -43,7 +43,7 @@ if "user_info" not in st.session_state:
         submitted = st.form_submit_button("시작하기")
         if submitted and school and name:
             st.session_state.user_info = {"school": school, "name": name}
-            st.experimental_rerun()
+            st.rerun()
         elif submitted:
             st.warning("학교명과 이름을 모두 입력해주세요.")
 
