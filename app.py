@@ -52,9 +52,18 @@ if "user_info" in st.session_state:
 
     # 대화 기록 초기화
     if "messages" not in st.session_state:
-        st.session_state.messages = [
-            {"role": "system", "content": "너는 중학생에게 개념을 설명해주는 과학 챗봇이야. 학생의 질문이 들어오면 중학교 수준에서 친절하게 대답해줘. 과학과 관련된 질문이 아닐 경우에는 답변을 피하도록 해."}
-        ]
+    st.session_state.messages = [
+        {
+            "role": "system",
+            "content": (
+                "역할: 너는 중학생을 위한 과학 개념 설명 챗봇이야.\n\n"
+                "규칙:\n"
+                "1. 학생의 질문에 중학교 수준에서 친절하게 설명해.\n"
+                "2. 질문이 과학(물리, 화학, 생물, 지구과학)과 관련이 없으면 정중히 답변을 거절해.\n"
+                "3. 특히 미성년자에게 부적절한 대답을 해서는 절대 안 돼."
+            )
+        }
+    ]
 
     # 사용자 입력
     user_input = st.chat_input(f"{user_label}님, 질문을 입력하세요")
