@@ -63,7 +63,7 @@ if "user_label" not in st.session_state:
 user_label = st.session_state["user_label"]
 
 # 개념 선택
-selected_concept = st.selectbox("학습할 개념을 선택하세요:", list(PROMPT_TEMPLATE.keys()))
+selected_concept = st.selectbox("학습할 개념을 선택하세요:", list(REFERENCE_ANSWERS.keys()))
 prompt = GENERAL_PROMPT.format(
     concept_name=selected_concept,
     reference_answer=REFERENCE_ANSWERS[selected_concept]
@@ -76,11 +76,13 @@ if "messages" not in st.session_state or st.session_state.get("last_concept") !=
     {"role": "assistant", "content": f"{selected_concept}에 대해 어떻게 생각하나요? 자유롭게 설명해보세요!"}
 ]
     st.session_state.last_concept = selected_concept
-
+    
 # 대화 출력
 for msg in st.session_state.messages[1:]:
-    speaker = f"🙋‍♂️ {user_label}" if msg["role"] == "user" else "🤖 GPT"
-    st.chat_message(msg["role"]).markdown(f"**{speaker}:** {msg['content']}")
+    with st.chat_message(msg["role"]):
+        speaker = f"🙋‍♂️ {user_label}" if msg["role"] == "user" else "🤖 GPT"
+        st.markdown(f"**{speaker}:** {msg['content']}")
+
 
 # 입력 받기
 user_input = st.chat_input("개념을 설명해보세요!")
