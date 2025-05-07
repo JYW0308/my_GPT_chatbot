@@ -50,6 +50,25 @@ if "user_info" not in st.session_state:
 if "user_info" in st.session_state:
     user_label = f"{st.session_state.user_info['school']} {st.session_state.user_info['name']}"
 
+
+    # 대화 기록 초기화
+    if "messages" not in st.session_state:
+        st.session_state.messages = [
+        {
+            "role": "system",
+            "content": (
+                "역할: 너는 고등학교 통합과학과 관련된 개념 설명을 위한 챗봇이야.\n\n"
+                "규칙:\n"
+                "1. 학생의 질문에 2022개정 교육과정의 고등학교 통합과학 수준에서 친절하게 설명해.\n"
+                "2. 질문이 과학(물리, 화학, 생물, 지구과학)과 관련이 없으면 정중히 답변을 거절해.\n"
+                "3. 특히 미성년자에게 부적절한 대답을 해서는 절대 안 돼."
+            )
+        }
+    ]
+
+
+
+    
     # 대화 기록 초기화
     if "messages" not in st.session_state:
         st.session_state.messages = [
@@ -59,18 +78,11 @@ if "user_info" in st.session_state:
                 "역할: 너는 고등학교 물리학과 관련된 개념 설명을 위한 챗봇이야.\n\n"
                 "규칙:\n"
                 "1. 학생의 질문에 2022 개정 교육과정의 고등학교 과학과 선택과목(물리학, 역학과 에너지, 전자기와 양자, 융합과학 탐구) 수준에서 친절하게 설명해.\n"
-
-        server.send_message(msg)
-
-# 초기 UI
-st.title("중학교 과학 학습 도우미 챗봇")
-st.write("AI 선생님에게 자유롭게 질문해보세요.")
-
-"역할: 너는 고등학교 통합과학과 관련된 개념 설명을 위한 챗봇이야.\n\n"
-                "규칙:\n"
-                "1. 학생의 질문에 2022개정 교육과정의 고등학교 통합과학 수준에서 친절하게 설명해.\n"
-                "2. 질문이 과학(물리, 화학, 생물, 지구과학)과 관련이 없으면 정중히 답변을 거절해.\n"
+                "2. 질문이 과학과 관련이 없으면 정중히 답변을 거절해.\n"
                 "3. 특히 미성년자에게 부적절한 대답을 해서는 절대 안 돼."
+            )
+        }
+    ]
 
                 
 
