@@ -43,7 +43,7 @@ st.title("7장 개념 학습 도우미 챗봇")
 selected_concept = st.selectbox("학습할 개념을 선택하세요:", ["구심 가속도", "케플러 법칙"])
 
 
-if "messages" not in st.session_state or st.session_state.get("last_concept") != concept:
+if "messages" not in st.session_state or st.session_state.get("last_concept") != selected_concept:
     st.session_state.messages = [
         {"role": "system", "content": PROMPT_TEMPLATE[selected_concept]},
         {"role": "assistant", "content": f"{selected_concept}에 대해 어떻게 생각하나요? 자유롭게 설명해보세요!"}
