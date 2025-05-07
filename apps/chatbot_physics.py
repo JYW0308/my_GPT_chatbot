@@ -73,36 +73,6 @@ st.write("AI 선생님에게 자유롭게 질문해보세요.")
                 "3. 특히 미성년자에게 부적절한 대답을 해서는 절대 안 돼."
 
                 
-# 사용자 정보 입력
-if "user_info" not in st.session_state:
-    with st.form("user_info_form"):
-        school = st.text_input("학교명")
-        name = st.text_input("이름")
-        submitted = st.form_submit_button("시작하기")
-        if submitted and school and name:
-            st.session_state.user_info = {"school": school, "name": name}
-            st.rerun()
-        elif submitted:
-            st.warning("학교명과 이름을 모두 입력해주세요.")
-
-# 사용자 정보가 입력된 경우
-if "user_info" in st.session_state:
-    user_label = f"{st.session_state.user_info['school']} {st.session_state.user_info['name']}"
-
-    # 대화 기록 초기화
-    if "messages" not in st.session_state:
-        st.session_state.messages = [
-        {
-            "role": "system",
-            "content": (
-                "역할: 너는 고등학교 물리학과 관련된 개념 설명을 위한 챗봇이야.\n\n"
-                "규칙:\n"
-                "1. 학생의 질문에 2022개정 교육과정의 고등학교 물리학 수준에서 친절하게 설명해.\n"
-                "2. 질문이 과학(물리, 화학, 생물, 지구과학)과 관련이 없으면 정중히 답변을 거절해.\n"
-                "3. 특히 미성년자에게 부적절한 대답을 해서는 절대 안 돼."
-            )
-        }
-    ]
 
     # 사용자 입력
     user_input = st.chat_input(f"{user_label}님, 질문을 입력하세요")
