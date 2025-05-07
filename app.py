@@ -53,7 +53,7 @@ if "user_info" in st.session_state:
     # 대화 기록 초기화
     if "messages" not in st.session_state:
         st.session_state.messages = [
-            {"role": "system", "content": "너는 중학교 과학 선생님이야. 학생의 질문이 들어오면 중학교 수준에서 친절하게 대답해줘."}
+            {"role": "system", "content": "너는 중학생에게 개념을 설명해주는 과학 챗봇이야. 학생의 질문이 들어오면 중학교 수준에서 친절하게 대답해줘. 과학과 관련된 질문이 아닐 경우에는 답변을 피하도록 해."}
         ]
 
     # 사용자 입력
