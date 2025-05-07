@@ -43,11 +43,13 @@ st.title("7장 개념 학습 도우미 챗봇")
 selected_concept = st.selectbox("학습할 개념을 선택하세요:", ["구심 가속도", "케플러 법칙"])
 
 
-
-# 초기 대화 기록 세션 저장
-if "messages" not in st.session_state or st.session_state.get("last_concept") != selected_concept:
-    st.session_state.messages = [{"role": "system", "content": SYSTEM_PROMPTS[selected_concept]}]
-    st.session_state.last_concept = selected_concept
+if "messages" not in st.session_state or st.session_state.get("last_concept") != concept:
+    st.session_state.messages = [
+        {"role": "system", "content": SYSTEM_PROMPTS[concept]},
+        {"role": "assistant", "content": f"{concept}에 대해 어떻게 생각하나요? 자유롭게 설명해보세요!"}
+    ]
+    st.session_state.last_concept = concept
+    
 
 # 기존 대화 출력
 for msg in st.session_state.messages[1:]:  # system 프롬프트는 생략
@@ -55,7 +57,7 @@ for msg in st.session_state.messages[1:]:  # system 프롬프트는 생략
         st.markdown(msg["content"])
 
 # 유저 입력 받기
-user_input = st.chat_input("질문을 입력해 보세요")
+user_input = st.chat_input("개념을 설명해보세요!")
 if user_input:
     st.session_state.messages.append({"role": "user", "content": user_input})
 
@@ -64,7 +66,7 @@ if user_input:
 
     with st.chat_message("assistant"):
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4o",
             messages=st.session_state.messages
         )
         reply = response.choices[0].message.content
