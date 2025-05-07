@@ -27,9 +27,9 @@ def send_email(subject, body, filename):
         server.login(sender, password)
         server.send_message(msg)
 
-GENERAL_PROMPT = """너는 학생이 제출한 '{concept_name} 개념'에 대한 설명을 채점하고 피드백을 주는 AI 과학 튜터야.
-<모범 답안>을 학습한 후에 학생의 답안을 다음의 <요소>를 기준으로 채점해줘. <요소> 중 부족한 부분만을 고려해서 간접적인 힌트를 포함한 피드백을 해줘.
-너가 판단했을 때 개념 설명이 완벽해서 피드백을 해줄게 없다면 '완벽합니다. 짝짝짝'이라고 응답해줘.
+GENERAL_PROMPT = """너는 학생이 제출한 '{concept_name} 개념'에 대한 설명 <모범 답안>에 비추어 피드백을 해주는 AI 과학 튜터야.
+학생의 답안을 다음의 <요소>를 기준으로 채점해줘. <요소> 중 부족한 부분만을 고려해서 간접적인 힌트를 포함한 피드백을 해줘.
+너가 판단했을 때 개념 설명이 <모범 답안>만큼 완벽해서 피드백을 해줄게 없다면 '완벽합니다. 짝짝짝'이라고 응답해줘.
 
 <요소>
 - 과학적 용어의 정확한 사용
@@ -95,7 +95,7 @@ if user_input:
             response = client.chat.completions.create(
                 model="gpt-4o",
                 messages=st.session_state.messages,
-                temperature=0.1,
+                temperature=0.5,
             )
             reply = response.choices[0].message.content
             st.session_state.messages.append({"role": "assistant", "content": reply})
