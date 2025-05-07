@@ -50,7 +50,7 @@ if "user_label" not in st.session_state:
     name = st.text_input("이름을 입력하세요:", key="name_input")
     if name:
         st.session_state.user_label = name
-        st.experimental_rerun()
+        st.rerun()
     st.stop()
 
 
