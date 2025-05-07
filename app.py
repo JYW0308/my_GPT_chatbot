@@ -52,7 +52,7 @@ if "user_info" in st.session_state:
 
     # 대화 기록 초기화
     if "messages" not in st.session_state:
-    st.session_state.messages = [
+        st.session_state.messages = [
         {
             "role": "system",
             "content": (
