@@ -54,6 +54,9 @@ if "user_label" not in st.session_state:
     st.stop()
 
 
+# 이후 코드에서는 안전하게 사용
+user_label = st.session_state.get("user_label", "학생")
+
 # 사용자 개념 선택
 selected_concept = st.selectbox("학습할 개념을 선택하세요:", ["구심 가속도", "케플러 법칙"])
 
