@@ -30,43 +30,48 @@ def send_email(subject, body, filename):
         server.login(sender, password)
         server.send_message(msg)
 
+SYSTEM_PROMPTS = {
+    "구심 가속도": "너는 학생이 제출한 '구심 가속도 개념'에 대한 설명을 채점하고 피드백을 주는 AI 과학 튜터야.",
+    "케플러 법칙": "너는 학생이 제출한 '케플러 법칙 개념'에 대한 설명을 채점하고 피드백을 주는 AI 과학 튜터야."
+}
+
+
 # 초기 UI
 st.title("7장 개념 학습 도우미 챗봇")
-st.write("5회 안에 개념을 완전히 습득하세요.")
 
-# 사용자 정보 입력
-if "user_info" not in st.session_state:
-    with st.form("user_info_form"):
-        school = st.text_input("학교명")
-        name = st.text_input("이름")
-        submitted = st.form_submit_button("시작하기")
-        if submitted and school and name:
-            st.session_state.user_info = {"school": school, "name": name}
-            st.rerun()
-        elif submitted:
-            st.warning("학교명과 이름을 모두 입력해주세요.")
+# 사용자 개념 선택
+selected_concept = st.selectbox("학습할 개념을 선택하세요:", ["구심 가속도", "케플러 법칙"])
 
-# 사용자 정보가 입력된 경우
-if "user_info" in st.session_state:
-    user_label = f"{st.session_state.user_info['school']} {st.session_state.user_info['name']}"
 
-    # 대화 기록 초기화
-    if "messages" not in st.session_state:
-        st.session_state.messages = [
-        {
-            "role": "system",
-            "content": (
-                "역할: 너는 중학생을 위한 과학 개념 설명 챗봇이야.\n\n"
-                "규칙:\n"
-                "1. 학생의 질문에 중학교 수준에서 친절하게 설명해.\n"
-                "2. 질문이 과학(물리, 화학, 생물, 지구과학)과 관련이 없으면 정중히 답변을 거절해.\n"
-                "3. 특히 미성년자에게 부적절한 대답을 해서는 절대 안 돼."
-            )
-        }
-    ]
 
-    # 사용자 입력
-    user_input = st.chat_input(f"{user_label}님, 질문을 입력하세요")
+# 초기 대화 기록 세션 저장
+if "messages" not in st.session_state or st.session_state.get("last_concept") != selected_concept:
+    st.session_state.messages = [{"role": "system", "content": SYSTEM_PROMPTS[selected_concept]}]
+    st.session_state.last_concept = selected_concept
+
+# 기존 대화 출력
+for msg in st.session_state.messages[1:]:  # system 프롬프트는 생략
+    with st.chat_message(msg["role"]):
+        st.markdown(msg["content"])
+
+# 유저 입력 받기
+user_input = st.chat_input("질문을 입력해 보세요")
+if user_input:
+    st.session_state.messages.append({"role": "user", "content": user_input})
+
+    with st.chat_message("user"):
+        st.markdown(user_input)
+
+    with st.chat_message("assistant"):
+        response = client.chat.completions.create(
+            model="gpt-4",
+            messages=st.session_state.messages
+        )
+        reply = response.choices[0].message.content
+        st.markdown(reply)
+
+    st.session_state.messages.append({"role": "assistant", "content": reply})
+
 
     if user_input:
         st.session_state.messages.append({"role": "user", "content": user_input})
