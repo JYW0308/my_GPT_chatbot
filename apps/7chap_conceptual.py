@@ -95,7 +95,7 @@ if user_input:
             response = client.chat.completions.create(
                 model="gpt-4o",
                 messages=st.session_state.messages,
-                temperature=0.2,
+                temperature=0.5,
             )
             reply = response.choices[0].message.content
             st.session_state.messages.append({"role": "assistant", "content": reply})
