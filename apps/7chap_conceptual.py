@@ -80,7 +80,7 @@ if "messages" not in st.session_state or st.session_state.get("last_concept") !=
 # 대화 출력
 for msg in st.session_state.messages[1:]:
     with st.chat_message(msg["role"]):
-        speaker = f"🙋‍♂️ {user_label}" if msg["role"] == "user" else "🤖 GPT"
+        speaker = f"{user_label}" if msg["role"] == "user" else "GPT"
         st.markdown(f"**{speaker}:** {msg['content']}")
 
 
@@ -89,7 +89,7 @@ user_input = st.chat_input("개념을 설명해보세요!")
 if user_input:
     st.session_state.messages.append({"role": "user", "content": user_input})
     with st.chat_message("user"):
-        st.markdown(f"**🙋‍♂️ {user_label}:** {user_input}")
+        st.markdown(f"**{user_label}:** {user_input}")
     with st.spinner("GPT가 피드백을 작성 중입니다..."):
         try:
             response = client.chat.completions.create(
@@ -100,13 +100,13 @@ if user_input:
             reply = response.choices[0].message.content
             st.session_state.messages.append({"role": "assistant", "content": reply})
             with st.chat_message("assistant"):
-                st.markdown(f"**🤖 GPT:** {reply}")
+                st.markdown(f"**GPT:** {reply}")
         except Exception as e:
             st.error(f"❌ 오류 발생: {e}")
 
 # 저장 및 이메일 전송
 chat_lines = [
-    f"{'🙋‍♂️ ' + user_label if msg['role'] == 'user' else '🤖 GPT'}: {msg['content']}"
+    f"{user_label if msg['role'] == 'user' else 'GPT'}: {msg['content']}"
     for msg in st.session_state.messages[1:]
 ]
 chat_text = "\n".join(chat_lines)
