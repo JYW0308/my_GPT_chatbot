@@ -103,7 +103,7 @@ if "user_info" in st.session_state:
 
     # 다운로드 버튼 + 이메일 전송
     clicked = st.download_button(
-        label="📥 대화 내용 저장",
+        label="📥 대화 내용 저장 및 개발자에게 데이터 전송",
         data=chat_text,
         file_name=filename,
         mime="text/plain"
