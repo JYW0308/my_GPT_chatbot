@@ -45,25 +45,32 @@ if "user_info" not in st.session_state:
             st.rerun()
         elif submitted:
             st.warning("학교명과 이름을 모두 입력해주세요.")
-
-# 사용자 정보가 입력된 경우
+    
 if "user_info" in st.session_state:
     user_label = f"{st.session_state.user_info['school']} {st.session_state.user_info['name']}"
 
-    # 대화 기록 초기화
+    # ✅ user_label을 먼저 정의한 다음 greeting에서 사용
     if "messages" not in st.session_state:
+        greeting = (
+            f"안녕하세요! 궁금한 과학 질문이 있다면 자유롭게 물어보세요 😊\n"
+            "그렇지만 제가 하는 말이 항상 옳은 것은 아니니, 반드시 팩트 체크를 하셔야 합니다."
+        )
         st.session_state.messages = [
-        {
-            "role": "system",
-            "content": (
-                "역할: 너는 고등학교 통합과학과 관련된 개념 설명을 위한 챗봇이야.\n\n"
-                "규칙:\n"
-                "1. 학생의 질문에 2022 개정 교육과정의 고등학교 과학과 공통 과목(통합과학, 과학탐구실험) 수준에서 친절하게 설명해.\n"
-                "2. 질문이 과학(물리, 화학, 생물, 지구과학)과 관련이 없으면 정중히 답변을 거절해.\n"
-                "3. 특히 미성년자에게 부적절한 대답을 해서는 절대 안 돼."
-            )
-        }
-    ]
+            {
+                "role": "system",
+                "content": (
+                    "역할: 너는 고등학교 통합과학과 관련된 개념 설명을 위한 챗봇이야.\n\n"
+                    "규칙:\n"
+                    "1. 학생의 질문에 2022 개정 교육과정의 고등학교 과학과 공통 과목(통합과학, 과학탐구실험) 수준에서 친절하게 설명해.\n"
+                    "2. 질문이 과학(물리, 화학, 생물, 지구과학)과 관련이 없으면 정중히 답변을 거절해.\n"
+                    "3. 특히 미성년자에게 부적절한 대답을 해서는 절대 안 돼."
+                )
+            },
+            {
+                "role": "assistant",
+                "content": greeting
+            }
+        ]
 
     # 사용자 입력
     user_input = st.chat_input(f"{user_label}님, 질문을 입력하세요")
