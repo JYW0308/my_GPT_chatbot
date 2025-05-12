@@ -50,9 +50,14 @@ if "user_info" not in st.session_state:
 if "user_info" in st.session_state:
     user_label = f"{st.session_state.user_info['school']} {st.session_state.user_info['name']}"
 
+
     # 대화 기록 초기화
-    if "messages" not in st.session_state:
-        st.session_state.messages = [
+if "messages" not in st.session_state:
+    greeting = (
+        f"안녕하세요, {user_label} 학생! 궁금한 과학 질문이 있다면 자유롭게 물어보세요 😊\n"
+        "물리, 화학, 생물, 지구과학 중 어떤 것이든 괜찮아요."
+    )
+    st.session_state.messages = [
         {
             "role": "system",
             "content": (
@@ -62,6 +67,10 @@ if "user_info" in st.session_state:
                 "2. 질문이 과학(물리, 화학, 생물, 지구과학)과 관련이 없으면 정중히 답변을 거절해.\n"
                 "3. 특히 미성년자에게 부적절한 대답을 해서는 절대 안 돼."
             )
+        },
+        {
+            "role": "assistant",
+            "content": greeting
         }
     ]
 
