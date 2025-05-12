@@ -45,8 +45,9 @@ if "user_info" not in st.session_state:
             st.rerun()
         elif submitted:
             st.warning("학교명과 이름을 모두 입력해주세요.")
-    if "user_info" in st.session_state:
-        user_label = f"{st.session_state.user_info['school']} {st.session_state.user_info['name']}"
+
+if "user_info" in st.session_state:
+    user_label = f"{st.session_state.user_info['school']} {st.session_state.user_info['name']}"
 
     # 메시지 초기화
     if "messages" not in st.session_state:
@@ -71,17 +72,11 @@ if "user_info" not in st.session_state:
             }
         ]
 
-    # ✅ 메시지 먼저 출력
-    for msg in st.session_state.messages[1:]:
-        if msg["role"] == "user":
-            st.markdown(f"**🙋‍♂️ {user_label}:** {msg['content']}")
-        else:
-            st.markdown(f"**🤖 GPT:** {msg['content']}")
-
-    # ✅ 여기서 선언하자 (항상 존재하게!)
+    # ✅ 이 줄은 반드시 이 if 문 안에 있어야 함!
     user_input = st.chat_input(f"{user_label}님, 질문을 입력하세요")
 
-    if user_input:  # 이제 이 줄은 안전하게 작동해
+    # 사용자 입력 처리
+    if user_input:
         st.session_state.messages.append({"role": "user", "content": user_input})
 
         with st.spinner("GPT-4o가 생각 중..."):
