@@ -31,14 +31,25 @@ def send_email(subject, body, filename):
         server.send_message(msg)
 
 # 초기 UI
-st.title("고등학교 통합과학 학습 도우미 챗봇")
+st.title("중학교 과학 학습 도우미 챗봇")
 st.write("AI 선생님에게 자유롭게 질문해보세요.")
 
-# 사용자 정보가 있는 경우에만 전체 챗봇 인터페이스 실행
+# 사용자 정보 입력
+if "user_info" not in st.session_state:
+    with st.form("user_info_form"):
+        school = st.text_input("학교명")
+        name = st.text_input("이름")
+        submitted = st.form_submit_button("시작하기")
+        if submitted and school and name:
+            st.session_state.user_info = {"school": school, "name": name}
+            st.rerun()
+        elif submitted:
+            st.warning("학교명과 이름을 모두 입력해주세요.")
+            
 if "user_info" in st.session_state:
     user_label = f"{st.session_state.user_info['school']} {st.session_state.user_info['name']}"
 
-    # 메시지 초기화 (한 번만)
+    # ✅ user_label을 먼저 정의한 다음 greeting에서 사용
     if "messages" not in st.session_state:
         greeting = (
             f"안녕하세요! 궁금한 과학 질문이 있다면 자유롭게 물어보세요 😊\n"
@@ -61,14 +72,8 @@ if "user_info" in st.session_state:
             }
         ]
 
-    # 메시지 출력
-    for msg in st.session_state.messages[1:]:
-        if msg["role"] == "user":
-            st.markdown(f"**🙋‍♂️ {user_label}:** {msg['content']}")
-        else:
-            st.markdown(f"**🤖 GPT:** {msg['content']}")
 
-    # ✅ 반드시 이 위치에서만 한 번만 선언해야 함
+    # 사용자 입력
     user_input = st.chat_input(f"{user_label}님, 질문을 입력하세요")
 
     if user_input:
@@ -86,7 +91,6 @@ if "user_info" in st.session_state:
             except Exception as e:
                 st.error(f"⚠️ 오류 발생: {e}")
 
-
     # 대화 출력
     for msg in st.session_state.messages[1:]:
         if msg["role"] == "user":
@@ -94,11 +98,6 @@ if "user_info" in st.session_state:
         else:
             st.markdown(f"**🤖 GPT:** {msg['content']}")
 
-    
-    # 사용자 입력
-    user_input = st.chat_input(f"{user_label}님, 질문을 입력하세요")
-
-    
     # 대화 정리 및 저장
     chat_lines = []
     for msg in st.session_state.messages[1:]:
