@@ -45,11 +45,10 @@ if "user_info" not in st.session_state:
             st.rerun()
         elif submitted:
             st.warning("학교명과 이름을 모두 입력해주세요.")
-    
-if "user_info" in st.session_state:
+    if "user_info" in st.session_state:
     user_label = f"{st.session_state.user_info['school']} {st.session_state.user_info['name']}"
 
-    # ✅ user_label을 먼저 정의한 다음 greeting에서 사용
+    # 메시지 초기화
     if "messages" not in st.session_state:
         greeting = (
             f"안녕하세요! 궁금한 과학 질문이 있다면 자유롭게 물어보세요 😊\n"
@@ -72,7 +71,17 @@ if "user_info" in st.session_state:
             }
         ]
 
-    if user_input:
+    # ✅ 메시지 먼저 출력
+    for msg in st.session_state.messages[1:]:
+        if msg["role"] == "user":
+            st.markdown(f"**🙋‍♂️ {user_label}:** {msg['content']}")
+        else:
+            st.markdown(f"**🤖 GPT:** {msg['content']}")
+
+    # ✅ 여기서 선언하자 (항상 존재하게!)
+    user_input = st.chat_input(f"{user_label}님, 질문을 입력하세요")
+
+    if user_input:  # 이제 이 줄은 안전하게 작동해
         st.session_state.messages.append({"role": "user", "content": user_input})
 
         with st.spinner("GPT-4o가 생각 중..."):
@@ -86,6 +95,7 @@ if "user_info" in st.session_state:
                 st.session_state.messages.append({"role": "assistant", "content": gpt_reply})
             except Exception as e:
                 st.error(f"⚠️ 오류 발생: {e}")
+
 
     # 대화 출력
     for msg in st.session_state.messages[1:]:
