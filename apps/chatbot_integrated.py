@@ -46,7 +46,7 @@ if "user_info" not in st.session_state:
         elif submitted:
             st.warning("학교명과 이름을 모두 입력해주세요.")
     if "user_info" in st.session_state:
-    user_label = f"{st.session_state.user_info['school']} {st.session_state.user_info['name']}"
+        user_label = f"{st.session_state.user_info['school']} {st.session_state.user_info['name']}"
 
     # 메시지 초기화
     if "messages" not in st.session_state:
