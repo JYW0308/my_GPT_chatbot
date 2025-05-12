@@ -34,22 +34,11 @@ def send_email(subject, body, filename):
 st.title("고등학교 통합과학 학습 도우미 챗봇")
 st.write("AI 선생님에게 자유롭게 질문해보세요.")
 
-# 사용자 정보 입력
-if "user_info" not in st.session_state:
-    with st.form("user_info_form"):
-        school = st.text_input("학교명")
-        name = st.text_input("이름")
-        submitted = st.form_submit_button("시작하기")
-        if submitted and school and name:
-            st.session_state.user_info = {"school": school, "name": name}
-            st.rerun()
-        elif submitted:
-            st.warning("학교명과 이름을 모두 입력해주세요.")
-
+# 사용자 정보가 있는 경우에만 전체 챗봇 인터페이스 실행
 if "user_info" in st.session_state:
     user_label = f"{st.session_state.user_info['school']} {st.session_state.user_info['name']}"
 
-    # 메시지 초기화
+    # 메시지 초기화 (한 번만)
     if "messages" not in st.session_state:
         greeting = (
             f"안녕하세요! 궁금한 과학 질문이 있다면 자유롭게 물어보세요 😊\n"
@@ -72,10 +61,16 @@ if "user_info" in st.session_state:
             }
         ]
 
-    # ✅ 이 줄은 반드시 이 if 문 안에 있어야 함!
+    # 메시지 출력
+    for msg in st.session_state.messages[1:]:
+        if msg["role"] == "user":
+            st.markdown(f"**🙋‍♂️ {user_label}:** {msg['content']}")
+        else:
+            st.markdown(f"**🤖 GPT:** {msg['content']}")
+
+    # ✅ 반드시 이 위치에서만 한 번만 선언해야 함
     user_input = st.chat_input(f"{user_label}님, 질문을 입력하세요")
 
-    # 사용자 입력 처리
     if user_input:
         st.session_state.messages.append({"role": "user", "content": user_input})
 
