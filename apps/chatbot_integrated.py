@@ -72,9 +72,6 @@ if "user_info" in st.session_state:
             }
         ]
 
-    # 사용자 입력
-    user_input = st.chat_input(f"{user_label}님, 질문을 입력하세요")
-
     if user_input:
         st.session_state.messages.append({"role": "user", "content": user_input})
 
@@ -97,6 +94,11 @@ if "user_info" in st.session_state:
         else:
             st.markdown(f"**🤖 GPT:** {msg['content']}")
 
+    
+    # 사용자 입력
+    user_input = st.chat_input(f"{user_label}님, 질문을 입력하세요")
+
+    
     # 대화 정리 및 저장
     chat_lines = []
     for msg in st.session_state.messages[1:]:
