@@ -31,7 +31,7 @@ def send_email(subject, body, filename):
         server.send_message(msg)
 
 # 초기 UI
-st.title("중학교 과학 학습 도우미 챗봇")
+st.title("고등학교 통합과학 학습 도우미 챗봇")
 st.write("AI 선생님에게 자유롭게 질문해보세요.")
 
 # 사용자 정보 입력
