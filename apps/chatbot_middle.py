@@ -52,8 +52,8 @@ if "user_info" in st.session_state:
     # ✅ user_label을 먼저 정의한 다음 greeting에서 사용
     if "messages" not in st.session_state:
         greeting = (
-            f"안녕하세요, {user_label} 학생! 궁금한 과학 질문이 있다면 자유롭게 물어보세요 😊\n"
-            "물리, 화학, 생물, 지구과학 중 어떤 것이든 괜찮아요."
+            f"안녕하세요! 궁금한 과학 질문이 있다면 자유롭게 물어보세요 😊\n"
+            "그렇지만 제가 하는 말이 항상 옳은 것은 아니니, 반드시 팩트 체크를 하셔야 합니다."
         )
         st.session_state.messages = [
             {
